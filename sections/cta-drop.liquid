@@ -1,0 +1,209 @@
+{%- comment -%}
+  Peachees CTA / Next Drop Section
+  Dark background with email signup form (Shopify customer form)
+{%- endcomment -%}
+
+<section class="cta-drop-section" id="drop" aria-labelledby="cta-title">
+  <div class="container">
+    <div class="cta-inner">
+      <span class="section-label">{{ section.settings.label | default: 'Next Drop' | escape }}</span>
+
+      <h2 id="cta-title" class="cta-heading">{{ section.settings.heading | escape }}</h2>
+
+      {%- if section.settings.description != blank -%}
+        <p class="cta-desc">{{ section.settings.description | escape }}</p>
+      {%- endif -%}
+
+      <div class="cta-form">
+        {%- form 'customer' -%}
+          {%- if form.posted_successfully? -%}
+            <div class="form-success" role="status">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M5 13l4 4L19 7" />
+              </svg>
+              <span>{{ section.settings.success_message | default: 'You\'re on the list! We\'ll be in touch.' }}</span>
+            </div>
+          {%- else -%}
+            {%- if form.errors -%}
+              <div class="form-error" role="alert">
+                {%- for field in form.errors -%}
+                  <p>{{ form.errors.messages[field] }}</p>
+                {%- endfor -%}
+                {%- for error in form.errors -%}
+                  {%- unless error == 'form' -%}{% endunless -%}
+                  <p>{{ error }}</p>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+
+            <div class="input-group">
+              <input
+                type="email"
+                name="contact[email]"
+                id="email-input"
+                placeholder="{{ section.settings.email_placeholder | default: 'Email address' }}"
+                aria-label="Email address"
+                required
+                autocomplete="email"
+                class="input-field"
+              >
+              <button type="submit" class="btn btn-primary cta-submit">
+                {{ section.settings.button_text | default: 'Notify me' }}
+              </button>
+            </div>
+            <p class="input-hint">Join to get early access and exclusive drops.</p>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-drop-section {
+    padding: var(--space-20) 0;
+  }
+  .cta-inner {
+    max-width: 520px;
+    margin: 0 auto;
+    text-align: center;
+    padding: var(--space-16) var(--space-8);
+    border-radius: var(--radius-lg);
+    background: var(--text);
+    color: var(--surface);
+  }
+  .section-label {
+    display: block;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: var(--space-4);
+  }
+  .cta-heading {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin: 0 0 var(--space-4);
+    color: var(--white);
+  }
+  @media (max-width: 768px) {
+    .cta-heading { font-size: var(--text-xl); }
+  }
+  .cta-desc {
+    font-size: var(--text-sm);
+    color: rgba(255,255,255,0.7);
+    margin: 0 0 var(--space-10);
+    line-height: 1.7;
+  }
+  .cta-form {
+    width: 100%;
+  }
+  .input-group {
+    display: flex;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+  @media (max-width: 580px) {
+    .input-group { flex-direction: column; }
+  }
+  .input-field {
+    flex: 1;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: var(--radius-md);
+    background: rgba(255,255,255,0.06);
+    color: var(--white);
+    font-size: var(--text-sm);
+    font-family: inherit;
+    min-width: 0;
+  }
+  .input-field::placeholder { color: rgba(255,255,255,0.4); }
+  .input-field:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: rgba(255,255,255,0.1);
+  }
+  .cta-submit {
+    white-space: nowrap;
+    padding: var(--space-3) var(--space-6);
+  }
+  .input-hint {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.4);
+    margin: 0;
+  }
+  .form-success {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    background: rgba(34,197,94,0.15);
+    border: 1px solid rgba(34,197,94,0.3);
+    border-radius: var(--radius-md);
+    color: rgba(34,197,94,0.9);
+    font-size: var(--text-sm);
+  }
+  .form-error {
+    padding: var(--space-3) var(--space-4);
+    background: rgba(239,68,68,0.15);
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: var(--radius-md);
+    color: rgba(239,68,68,0.9);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-4);
+  }
+  .form-error p { margin: 0; }
+</style>
+
+{% schema %}
+{
+  "name": "CTA / Next Drop",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Next Drop"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Join the list for the next Peachees release."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Discover the latest Peachees styles and join the list to be first in line for new arrivals, exclusive drops, and limited-edition releases."
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "Email address"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Notify me"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "You're on the list! We'll be in touch."
+    }
+  ],
+  "presets": [
+    {
+      "name": "CTA / Next Drop"
+    }
+  ]
+}
+{% endschema %}
