@@ -1,0 +1,255 @@
+{%- comment -%}
+  Peachees Footer Section
+  Simple footer with brand, links, and social icons
+{%- endcomment -%}
+
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        {% if section.settings.logo != blank %}
+          <img
+            srcset="{{- section.settings.logo | image_url: width: 140 -
+            }} 1x, {{- section.settings.logo | image_url: width: 280 -
+            }} 2x"
+            src="{{ section.settings.logo | image_url: width: 140 }}"
+            alt="{{ shop.name }}"
+            width="100"
+            class="footer-logo"
+          >
+        {% else %}
+          <span class="footer-brand-text">PEACHEES <small>FIT</small></span>
+        {% endif %}
+
+        {%- if section.settings.footer_text != blank -%}
+          <p class="footer-tagline">{{ section.settings.footer_text }}</p>
+        {%- endif -%}
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4 class="footer-col-title">
+            {{ section.settings.collection_label | default: 'Collection' | escape }}
+          </h4>
+          <ul>
+            {% for collection in linklists[section.settings.nav_collection_list].links | default: shop.collections %}
+              <li><a href="{{ collection.handle | prepend: '/collections/' }}">{{ collection.title }}</a></li>
+            {% endfor %}
+            {%- unless linklists[section.settings.nav_collection_list].links -%}
+              <li><a href="{{ routes.collections_url }}">View all</a></li>
+            {%- endunless -%}
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-col-title">
+            {{ section.settings.lookbook_label | default: 'Lookbook' | escape }}
+          </h4>
+          <ul>
+            <li><a href="{{ section.settings.lookbook_url | default: routes.collections_url }}">Campaign</a></li>
+            <li><a href="{% if section.settings.story_url != blank %}{{ section.settings.story_url }}{% else %}{{ routes.collections_url }}{% endif %}">Editorial</a></li>
+            <li><a href="{{ routes.collections_url }}#lookbook">Curated Drops</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-col-title">
+            {{ section.settings.social_label | default: 'Social' | escape }}
+          </h4>
+          <ul>
+            {% if section.settings.instagram_url != blank %}
+              <li><a href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener">Instagram</a></li>
+            {% endif %}
+            {% if section.settings.tiktok_url != blank %}
+              <li><a href="{{ section.settings.tiktok_url }}" target="_blank" rel="noopener">TikTok</a></li>
+            {% endif %}
+            {% if section.settings.pinterest_url != blank %}
+              <li><a href="{{ section.settings.pinterest_url }}" target="_blank" rel="noopener">Pinterest</a></li>
+            {% endif %}
+            {% if section.settings.facebook_url != blank %}
+              <li><a href="{{ section.settings.facebook_url }}" target="_blank" rel="noopener">Facebook</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="copyright">
+        &copy; {{ 'now' | date: "%Y" }} {{ shop.name | escape }}. All rights reserved.
+      </p>
+
+      <div class="footer-legal">
+        <a href="{{ routes.privacy_policy_url }}">Privacy Policy</a>
+        <a href="{{ routes.terms_service_url }}">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+    padding: var(--space-20) 0 var(--space-10);
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 2fr;
+    gap: var(--space-16);
+    margin-bottom: var(--space-16);
+  }
+  @media (max-width: 768px) {
+    .footer-grid { grid-template-columns: 1fr; gap: var(--space-10); }
+  }
+  .footer-brand { max-width: 280px; }
+  .footer-brand-text {
+    font-size: 1.25rem;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+  .footer-brand-text small {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-left: var(--space-1);
+  }
+  .footer-tagline {
+    font-size: var(--text-sm);
+    color: var(--muted);
+    line-height: 1.7;
+    margin: var(--space-4) 0 0;
+  }
+  .footer-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-10);
+  }
+  @media (max-width: 768px) {
+    .footer-links { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .footer-links { grid-template-columns: 1fr; }
+  }
+  .footer-col-title {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 var(--space-4);
+  }
+  .footer-col ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .footer-col li { margin-bottom: var(--space-2); }
+  .footer-col a {
+    font-size: var(--text-sm);
+    color: var(--text);
+    opacity: 0.85;
+    transition: opacity 0.2s;
+  }
+  .footer-col a:hover { opacity: 1; }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--line);
+  }
+  @media (max-width: 580px) {
+    .footer-bottom { flex-direction: column; gap: var(--space-3); text-align: center; }
+  }
+  .copyright {
+    font-size: var(--text-xs);
+    color: var(--muted);
+    margin: 0;
+  }
+  .footer-legal {
+    display: flex;
+    gap: var(--space-6);
+  }
+  .footer-legal a {
+    font-size: var(--text-xs);
+    color: var(--muted);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .footer-legal a:hover { color: var(--text); }
+</style>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Footer logo image"
+    },
+    {
+      "type": "textarea",
+      "id": "footer_text",
+      "label": "Tagline / brand text",
+      "default": "Curated activewear designed for movement, confidence, and everyday luxury."
+    },
+    {
+      "type": "link_list",
+      "id": "nav_collection_list",
+      "label": "Collection navigation menu"
+    },
+    {
+      "type": "text",
+      "id": "collection_label",
+      "label": "Collection column label",
+      "default": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "lookbook_label",
+      "label": "Lookbook column label",
+      "default": "Lookbook"
+    },
+    {
+      "type": "url",
+      "id": "lookbook_url",
+      "label": "Lookbook URL"
+    },
+    {
+      "type": "url",
+      "id": "story_url",
+      "label": "Story URL"
+    },
+    {
+      "type": "text",
+      "id": "social_label",
+      "label": "Social column label",
+      "default": "Social"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "TikTok URL"
+    },
+    {
+      "type": "url",
+      "id": "pinterest_url",
+      "label": "Pinterest URL"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook URL"
+    }
+  ]
+}
+{% endschema %}
